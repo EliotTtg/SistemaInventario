@@ -1,5 +1,7 @@
 package model;
 
-public class Rol {
-    
+public enum Rol {
+
+    ADMINISTRADOR,
+    TRABAJADOR
 }
