@@ -5,63 +5,69 @@ import java.time.LocalDateTime;
 public class Reporte {
 
     private int idReporte;
-    private TipoReporte tipoReporte;
     private LocalDateTime fechaGeneracion;
-    private int idUsuario;
+    private String tipoReporte;
+    private Usuario usuario;
 
     public Reporte() {
     }
 
-    public Reporte(int idReporte,
-                   TipoReporte tipoReporte,
-                   LocalDateTime fechaGeneracion,
-                   int idUsuario) {
+    public Reporte(
+            int idReporte,
+            LocalDateTime fechaGeneracion,
+            String tipoReporte,
+            Usuario usuario
+    ) {
 
         this.idReporte = idReporte;
-        this.tipoReporte = tipoReporte;
         this.fechaGeneracion = fechaGeneracion;
-        this.idUsuario = idUsuario;
-    }
-
-    public void generarReporteStock() {
-
-        System.out.println("Reporte stock generado");
-    }
-
-    public void generarReporteMovimientos() {
-
-        System.out.println("Reporte movimientos generado");
+        this.tipoReporte = tipoReporte;
+        this.usuario = usuario;
     }
 
     public int getIdReporte() {
         return idReporte;
     }
 
-    public void setIdReporte(int idReporte) {
+    public void setIdReporte(
+            int idReporte
+    ) {
         this.idReporte = idReporte;
-    }
-
-    public TipoReporte getTipoReporte() {
-        return tipoReporte;
-    }
-
-    public void setTipoReporte(TipoReporte tipoReporte) {
-        this.tipoReporte = tipoReporte;
     }
 
     public LocalDateTime getFechaGeneracion() {
         return fechaGeneracion;
     }
 
-    public void setFechaGeneracion(LocalDateTime fechaGeneracion) {
+    public void setFechaGeneracion(
+            LocalDateTime fechaGeneracion
+    ) {
         this.fechaGeneracion = fechaGeneracion;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public String getTipoReporte() {
+        return tipoReporte;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setTipoReporte(
+            String tipoReporte
+    ) {
+        this.tipoReporte = tipoReporte;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(
+            Usuario usuario
+    ) {
+        this.usuario = usuario;
+    }
+
+    @Override
+    public String toString() {
+
+        return tipoReporte;
     }
 }

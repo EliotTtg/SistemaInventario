@@ -1,18 +1,32 @@
-## Getting Started
+# Sistema Inventario
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Sistema de gestión de inventario desarrollado en Java utilizando arquitectura MVC.
 
-## Folder Structure
+# Características
 
-The workspace contains two folders by default, where:
+- Gestión de productos
+- Gestión de categorías
+- Gestión de proveedores
+- Gestión de usuarios
+- Control de movimientos de inventario
+- Generación de reportes
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+# Tecnologías utilizadas
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+- Java
+- JDBC
+- MySQL
+- Arquitectura MVC
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+# Estructura del proyecto
 
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+```bash
+src/
+│
+├── model/        # Entidades del sistema
+├── view/         # Interfaces y vistas
+├── controller/   # Controladores MVC
+├── dao/          # Acceso a base de datos
+├── services/     # Lógica de negocio
+├── config/       # Configuración de conexión
+└── util/         # Utilidades y helpers

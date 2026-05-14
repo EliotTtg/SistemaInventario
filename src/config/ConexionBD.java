@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConexionDB {
+public class ConexionBD {
 
     private static final String URL =
             "jdbc:mysql://localhost:3306/sistema_inventario?useSSL=false&serverTimezone=UTC";

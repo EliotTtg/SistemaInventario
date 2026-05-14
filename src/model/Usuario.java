@@ -22,14 +22,6 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public void iniciarSesion() {
-        System.out.println("Sesion iniciada");
-    }
-
-    public void cerrarSesion() {
-        System.out.println("Sesion cerrada");
-    }
-
     public int getIdUsuario() {
         return idUsuario;
     }

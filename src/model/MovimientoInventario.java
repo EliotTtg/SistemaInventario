@@ -2,15 +2,18 @@ package model;
 
 import java.time.LocalDateTime;
 
-public abstract class MovimientoInventario {
+public class MovimientoInventario {
 
-    protected int idMovimiento;
-    protected LocalDateTime fecha;
-    protected int cantidad;
-    protected String motivo;
-    protected TipoMovimiento tipoMovimiento;
+    private int idMovimiento;
+    private LocalDateTime fecha;
+    private int cantidad;
+    private String motivo;
+    private TipoMovimiento tipoMovimiento;
+    private Producto producto;
+    private Usuario usuario;
 
-    public abstract void procesarMovimiento();
+    public MovimientoInventario() {
+    }
 
     public int getIdMovimiento() {
         return idMovimiento;
@@ -48,7 +51,29 @@ public abstract class MovimientoInventario {
         return tipoMovimiento;
     }
 
-    public void setTipoMovimiento(TipoMovimiento tipoMovimiento) {
+    public void setTipoMovimiento(
+            TipoMovimiento tipoMovimiento
+    ) {
         this.tipoMovimiento = tipoMovimiento;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(
+            Producto producto
+    ) {
+        this.producto = producto;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(
+            Usuario usuario
+    ) {
+        this.usuario = usuario;
     }
 }

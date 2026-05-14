@@ -1,22 +1,14 @@
 package main;
 
-import config.ConexionDB;
-
-import java.sql.Connection;
+import controller.LoginController;
+import view.LoginView;
 
 public class App {
 
     public static void main(String[] args) {
 
-        try (
-                Connection con = ConexionDB.conectar()
-        ) {
+        LoginView view = new LoginView();
 
-            System.out.println("Conexion exitosa a MySQL");
-
-        } catch (Exception e) {
-
-            System.out.println("Error: " + e.getMessage());
-        }
+        new LoginController(view);
     }
 }
