@@ -198,9 +198,12 @@ public class MovimientoDAO {
                 new ArrayList<>();
 
         String sql = """
-                SELECT *
-                FROM movimientos
-                ORDER BY fecha DESC
+                SELECT m.*,
+                p.nombre AS producto_nombre
+                FROM movimientos m
+                INNER JOIN productos p
+                ON m.id_producto = p.id_producto
+                ORDER BY m.fecha DESC
                 """;
 
         try (
@@ -259,7 +262,6 @@ public class MovimientoDAO {
                         tipo
                 );
 
-
                 Producto producto =
                         new Producto();
 
@@ -269,10 +271,15 @@ public class MovimientoDAO {
                         )
                 );
 
+                producto.setNombre(
+                        rs.getString(
+                                "producto_nombre"
+                        )
+                );
+
                 movimiento.setProducto(
                         producto
                 );
-
 
                 Usuario usuario =
                         new Usuario();

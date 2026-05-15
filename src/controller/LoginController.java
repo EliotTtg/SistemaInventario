@@ -1,7 +1,11 @@
 package controller;
 
 import dao.UsuarioDAO;
+
 import model.Usuario;
+
+import session.Session;
+
 import view.DashboardView;
 import view.LoginView;
 
@@ -11,30 +15,50 @@ import java.awt.event.ActionListener;
 public class LoginController {
 
     private LoginView view;
+
     private UsuarioDAO dao;
 
-    public LoginController(LoginView view) {
+    public LoginController(
+            LoginView view
+    ) {
 
         this.view = view;
+
         this.dao = new UsuarioDAO();
 
-        this.view.addLoginListener(new LoginListener());
+        this.view.addLoginListener(
+                new LoginListener()
+        );
     }
 
-    class LoginListener implements ActionListener {
+    class LoginListener
+            implements ActionListener {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(
+                ActionEvent e
+        ) {
 
-            String usuario = view.getUsuario();
-            String password = view.getPassword();
+            String usuario =
+                    view.getUsuario();
 
-            Usuario user = dao.validarUsuario(usuario, password);
+            String password =
+                    view.getPassword();
+
+            Usuario user =
+                    dao.validarUsuario(
+                            usuario,
+                            password
+                    );
 
             if(user != null){
 
-                view.mostrarMensaje(
-                        "Bienvenido " + user.getNombre()
+                Session.usuarioActual =
+                        user;
+
+                view.mostrarExito(
+                        "Bienvenido "
+                        + user.getNombre()
                 );
 
                 new DashboardView();
@@ -43,7 +67,7 @@ public class LoginController {
 
             }else{
 
-                view.mostrarMensaje(
+                view.mostrarError(
                         "Credenciales incorrectas"
                 );
             }

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConexionBD {
 
     private static final String URL =
-            "jdbc:mysql://localhost:3306/sistema_inventario?useSSL=false&serverTimezone=UTC";
+            "jdbc:mysql://localhost:3306/sistema_inventario?useSSL=false&serverTimezone=America/Lima";
 
     private static final String USER = "root";
     private static final String PASSWORD = "mysqladmin";

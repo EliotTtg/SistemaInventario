@@ -1,16 +1,18 @@
 package dao;
 
 import config.ConexionBD;
+
 import model.Reporte;
 import model.Usuario;
 
 import java.sql.*;
+
+import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReporteDAO {
-
-
 
     public boolean guardar(
             Reporte reporte
@@ -59,7 +61,6 @@ public class ReporteDAO {
         return false;
     }
 
-
     public Reporte buscarPorId(
             int id
     ) {
@@ -67,9 +68,12 @@ public class ReporteDAO {
         Reporte reporte = null;
 
         String sql = """
-                SELECT *
-                FROM reportes
-                WHERE id_reporte = ?
+                SELECT r.*,
+                       u.nombre AS usuario_nombre
+                FROM reportes r
+                INNER JOIN usuarios u
+                    ON r.id_usuario = u.id_usuario
+                WHERE r.id_reporte = ?
                 """;
 
         try (
@@ -89,7 +93,8 @@ public class ReporteDAO {
 
             if (rs.next()) {
 
-                reporte = new Reporte();
+                reporte =
+                        new Reporte();
 
                 reporte.setIdReporte(
                         rs.getInt(
@@ -98,9 +103,10 @@ public class ReporteDAO {
                 );
 
                 reporte.setFechaGeneracion(
-                        rs.getTimestamp(
-                                "fecha_generacion"
-                        ).toLocalDateTime()
+                        rs.getObject(
+                                "fecha_generacion",
+                                LocalDateTime.class
+                        )
                 );
 
                 reporte.setTipoReporte(
@@ -109,13 +115,18 @@ public class ReporteDAO {
                         )
                 );
 
-
                 Usuario usuario =
                         new Usuario();
 
                 usuario.setIdUsuario(
                         rs.getInt(
                                 "id_usuario"
+                        )
+                );
+
+                usuario.setNombre(
+                        rs.getString(
+                                "usuario_nombre"
                         )
                 );
 
@@ -135,16 +146,18 @@ public class ReporteDAO {
         return reporte;
     }
 
-
     public List<Reporte> listar() {
 
         List<Reporte> lista =
                 new ArrayList<>();
 
         String sql = """
-                SELECT *
-                FROM reportes
-                ORDER BY fecha_generacion DESC
+                SELECT r.*,
+                       u.nombre AS usuario_nombre
+                FROM reportes r
+                INNER JOIN usuarios u
+                    ON r.id_usuario = u.id_usuario
+                ORDER BY r.fecha_generacion DESC
                 """;
 
         try (
@@ -172,9 +185,10 @@ public class ReporteDAO {
                 );
 
                 reporte.setFechaGeneracion(
-                        rs.getTimestamp(
-                                "fecha_generacion"
-                        ).toLocalDateTime()
+                        rs.getObject(
+                                "fecha_generacion",
+                                LocalDateTime.class
+                        )
                 );
 
                 reporte.setTipoReporte(
@@ -183,13 +197,18 @@ public class ReporteDAO {
                         )
                 );
 
-
                 Usuario usuario =
                         new Usuario();
 
                 usuario.setIdUsuario(
                         rs.getInt(
                                 "id_usuario"
+                        )
+                );
+
+                usuario.setNombre(
+                        rs.getString(
+                                "usuario_nombre"
                         )
                 );
 
@@ -210,7 +229,6 @@ public class ReporteDAO {
 
         return lista;
     }
-
 
     public boolean eliminar(
             int id

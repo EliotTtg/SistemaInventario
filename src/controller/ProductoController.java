@@ -1,21 +1,32 @@
 package controller;
 
+import session.Session;
+
+import dao.CategoriaDAO;
 import dao.ProductoDAO;
+import dao.ProveedorDAO;
+import dao.ReporteDAO;
+
 import model.Categoria;
 import model.Producto;
 import model.Proveedor;
+import model.Reporte;
+
+import view.DashboardView;
 import view.ProductoView;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
 import java.util.List;
 
 public class ProductoController {
 
     private ProductoView view;
-
     private ProductoDAO dao;
-
+    private CategoriaDAO categoriaDAO;
+    private ProveedorDAO proveedorDAO;
+    private ReporteDAO reporteDAO;
     private int idProductoSeleccionado = -1;
 
     public ProductoController(
@@ -24,23 +35,79 @@ public class ProductoController {
 
         this.view = view;
 
-        this.dao = new ProductoDAO();
+        dao = new ProductoDAO();
+
+        categoriaDAO =
+                new CategoriaDAO();
+
+        proveedorDAO =
+                new ProveedorDAO();
+
+        reporteDAO =
+                new ReporteDAO();
+
+        cargarCategorias();
+
+        cargarProveedores();
 
         listarProductos();
 
         this.view.btnGuardar
-                .addActionListener(e -> guardar());
+                .addActionListener(
+                        e -> guardar()
+                );
 
         this.view.btnActualizar
-                .addActionListener(e -> actualizar());
+                .addActionListener(
+                        e -> actualizar()
+                );
 
         this.view.btnEliminar
-                .addActionListener(e -> eliminar());
+                .addActionListener(
+                        e -> eliminar()
+                );
+
+        this.view.btnGenerarReporte
+                .addActionListener(
+                        e -> generarReporte()
+                );
+
+        this.view.btnVolver
+                .addActionListener(
+                        e -> volver()
+                );
 
         this.view.tabla.getSelectionModel()
-                .addListSelectionListener(e -> seleccionarFila());
+                .addListSelectionListener(
+                        e -> seleccionarFila()
+                );
     }
 
+    public void cargarCategorias() {
+
+        view.cbCategoria.removeAllItems();
+
+        List<Categoria> lista =
+                categoriaDAO.listar();
+
+        for(Categoria c : lista){
+
+            view.cbCategoria.addItem(c);
+        }
+    }
+
+    public void cargarProveedores() {
+
+        view.cbProveedor.removeAllItems();
+
+        List<Proveedor> lista =
+                proveedorDAO.listar();
+
+        for(Proveedor p : lista){
+
+            view.cbProveedor.addItem(p);
+        }
+    }
 
     public void guardar() {
 
@@ -57,26 +124,39 @@ public class ProductoController {
                     view.txtNombre.getText()
             );
 
+            producto.setDescripcion(
+                    view.txtDescripcion.getText()
+            );
+
+            producto.setStockActual(
+                    Integer.parseInt(
+                            view.txtStock.getText()
+                    )
+            );
+
+            producto.setStockMinimo(
+                    Integer.parseInt(
+                            view.txtStockMinimo.getText()
+                    )
+            );
+
             producto.setPrecio(
                     Double.parseDouble(
                             view.txtPrecio.getText()
                     )
             );
 
+            producto.setCategoria(
+                    (Categoria)
+                            view.cbCategoria
+                                    .getSelectedItem()
+            );
 
-            Categoria categoria =
-                    new Categoria();
-
-            categoria.setIdCategoria(1);
-
-            Proveedor proveedor =
-                    new Proveedor();
-
-            proveedor.setIdProveedor(1);
-
-            producto.setCategoria(categoria);
-
-            producto.setProveedor(proveedor);
+            producto.setProveedor(
+                    (Proveedor)
+                            view.cbProveedor
+                                    .getSelectedItem()
+            );
 
             boolean resultado =
                     dao.guardar(producto);
@@ -109,7 +189,6 @@ public class ProductoController {
         }
     }
 
-
     public void actualizar() {
 
         if(idProductoSeleccionado == -1){
@@ -139,25 +218,39 @@ public class ProductoController {
                     view.txtNombre.getText()
             );
 
+            producto.setDescripcion(
+                    view.txtDescripcion.getText()
+            );
+
+            producto.setStockActual(
+                    Integer.parseInt(
+                            view.txtStock.getText()
+                    )
+            );
+
+            producto.setStockMinimo(
+                    Integer.parseInt(
+                            view.txtStockMinimo.getText()
+                    )
+            );
+
             producto.setPrecio(
                     Double.parseDouble(
                             view.txtPrecio.getText()
                     )
             );
 
-            Categoria categoria =
-                    new Categoria();
+            producto.setCategoria(
+                    (Categoria)
+                            view.cbCategoria
+                                    .getSelectedItem()
+            );
 
-            categoria.setIdCategoria(1);
-
-            Proveedor proveedor =
-                    new Proveedor();
-
-            proveedor.setIdProveedor(1);
-
-            producto.setCategoria(categoria);
-
-            producto.setProveedor(proveedor);
+            producto.setProveedor(
+                    (Proveedor)
+                            view.cbProveedor
+                                    .getSelectedItem()
+            );
 
             boolean resultado =
                     dao.actualizar(producto);
@@ -189,7 +282,6 @@ public class ProductoController {
             );
         }
     }
-
 
     public void eliminar() {
 
@@ -230,11 +322,41 @@ public class ProductoController {
         }
     }
 
+    public void generarReporte() {
+
+        Reporte reporte =
+                new Reporte();
+
+        reporte.setTipoReporte(
+                "REPORTE_PRODUCTOS"
+        );
+
+        reporte.setUsuario(
+                Session.usuarioActual
+        );
+
+        boolean resultado =
+                reporteDAO.guardar(reporte);
+
+        if(resultado){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Reporte generado correctamente"
+                );
+
+        }else{
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Error al generar reporte"
+                );
+        }
+    }
 
     public void listarProductos() {
 
         DefaultTableModel model =
-
                 (DefaultTableModel)
                         view.tabla.getModel();
 
@@ -246,21 +368,16 @@ public class ProductoController {
         for(Producto p : lista){
 
             model.addRow(
-
                     new Object[]{
-
                             p.getIdProducto(),
-
                             p.getCodigo(),
-
                             p.getNombre(),
-
+                            p.getStockActual(),
                             p.getPrecio()
                     }
             );
         }
     }
-
 
     public void seleccionarFila() {
 
@@ -270,41 +387,98 @@ public class ProductoController {
         if(fila != -1){
 
             idProductoSeleccionado =
-
                     Integer.parseInt(
-
                             view.tabla.getValueAt(
                                     fila,
                                     0
                             ).toString()
                     );
 
-            view.txtCodigo.setText(
+            Producto producto =
+                    dao.buscarPorId(
+                            idProductoSeleccionado
+                    );
 
-                    view.tabla.getValueAt(
-                            fila,
-                            1
-                    ).toString()
-            );
+            if(producto != null){
 
-            view.txtNombre.setText(
+                view.txtCodigo.setText(
+                        producto.getCodigo()
+                );
 
-                    view.tabla.getValueAt(
-                            fila,
-                            2
-                    ).toString()
-            );
+                view.txtNombre.setText(
+                        producto.getNombre()
+                );
 
-            view.txtPrecio.setText(
+                view.txtDescripcion.setText(
+                        producto.getDescripcion()
+                );
 
-                    view.tabla.getValueAt(
-                            fila,
-                            3
-                    ).toString()
-            );
+                view.txtStock.setText(
+                        String.valueOf(
+                                producto.getStockActual()
+                        )
+                );
+
+                view.txtStockMinimo.setText(
+                        String.valueOf(
+                                producto.getStockMinimo()
+                        )
+                );
+
+                view.txtPrecio.setText(
+                        String.valueOf(
+                                producto.getPrecio()
+                        )
+                );
+
+                for(
+                        int i = 0;
+                        i < view.cbCategoria.getItemCount();
+                        i++
+                ){
+
+                    Categoria c =
+                            view.cbCategoria
+                                    .getItemAt(i);
+
+                    if(
+                            c.getIdCategoria() ==
+                            producto.getCategoria()
+                                    .getIdCategoria()
+                    ){
+
+                        view.cbCategoria
+                                .setSelectedIndex(i);
+
+                        break;
+                    }
+                }
+
+                for(
+                        int i = 0;
+                        i < view.cbProveedor.getItemCount();
+                        i++
+                ){
+
+                    Proveedor p =
+                            view.cbProveedor
+                                    .getItemAt(i);
+
+                    if(
+                            p.getIdProveedor() ==
+                            producto.getProveedor()
+                                    .getIdProveedor()
+                    ){
+
+                        view.cbProveedor
+                                .setSelectedIndex(i);
+
+                        break;
+                    }
+                }
+            }
         }
     }
-
 
     public void limpiar() {
 
@@ -312,8 +486,33 @@ public class ProductoController {
 
         view.txtNombre.setText("");
 
+        view.txtDescripcion.setText("");
+
+        view.txtStock.setText("");
+
+        view.txtStockMinimo.setText("");
+
         view.txtPrecio.setText("");
 
+        if(view.cbCategoria.getItemCount() > 0){
+
+            view.cbCategoria
+                    .setSelectedIndex(0);
+        }
+
+        if(view.cbProveedor.getItemCount() > 0){
+
+            view.cbProveedor
+                    .setSelectedIndex(0);
+        }
+
         idProductoSeleccionado = -1;
+    }
+
+    public void volver() {
+
+        new DashboardView();
+
+        view.dispose();
     }
 }
