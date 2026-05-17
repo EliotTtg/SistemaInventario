@@ -6,6 +6,7 @@ import controller.MovimientoController;
 import controller.ProductoController;
 import controller.ProveedorController;
 import controller.ReporteController;
+import controller.UsuarioController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,7 @@ public class DashboardView extends JFrame {
 
         setTitle("Sistema Inventario");
 
-        setSize(1100, 650);
+        setSize(1200, 700);
 
         setDefaultCloseOperation(
                 JFrame.EXIT_ON_CLOSE
@@ -26,12 +27,11 @@ public class DashboardView extends JFrame {
 
         setLayout(new BorderLayout());
 
-
         Color colorFondo =
-                new Color(245, 247, 250);
+                new Color(245,247,250);
 
         Color colorBoton =
-                new Color(52, 73, 94);
+                new Color(52,73,94);
 
         Color colorTexto =
                 Color.WHITE;
@@ -44,11 +44,11 @@ public class DashboardView extends JFrame {
                 new JPanel();
 
         panelSuperior.setBackground(
-                new Color(41, 128, 185)
+                new Color(41,128,185)
         );
 
         panelSuperior.setPreferredSize(
-                new Dimension(100, 80)
+                new Dimension(100,80)
         );
 
         JLabel titulo =
@@ -56,7 +56,9 @@ public class DashboardView extends JFrame {
                         "SISTEMA DE INVENTARIO"
                 );
 
-        titulo.setForeground(Color.WHITE);
+        titulo.setForeground(
+                Color.WHITE
+        );
 
         titulo.setFont(
                 new Font(
@@ -73,7 +75,6 @@ public class DashboardView extends JFrame {
                 BorderLayout.NORTH
         );
 
-
         JPanel panelCentral =
                 new JPanel();
 
@@ -83,7 +84,7 @@ public class DashboardView extends JFrame {
 
         panelCentral.setLayout(
                 new GridLayout(
-                        2,
+                        3,
                         3,
                         25,
                         25
@@ -99,7 +100,6 @@ public class DashboardView extends JFrame {
                         40
                 )
         );
-
 
         JButton btnProductos =
                 crearBoton(
@@ -141,14 +141,21 @@ public class DashboardView extends JFrame {
                         colorTexto
                 );
 
+        JButton btnUsuarios =
+                crearBoton(
+                        "👤",
+                        "USUARIOS",
+                        colorBoton,
+                        colorTexto
+                );
+
         JButton btnCerrarSesion =
                 crearBoton(
                         "🔒",
                         "CERRAR SESION",
-                        new Color(192, 57, 43),
+                        new Color(192,57,43),
                         colorTexto
                 );
-
 
         btnProductos.addActionListener(e -> {
 
@@ -200,6 +207,16 @@ public class DashboardView extends JFrame {
             dispose();
         });
 
+        btnUsuarios.addActionListener(e -> {
+
+            UsuarioView view =
+                    new UsuarioView();
+
+            new UsuarioController(view);
+
+            dispose();
+        });
+
         btnCerrarSesion.addActionListener(e -> {
 
             int opcion =
@@ -219,12 +236,18 @@ public class DashboardView extends JFrame {
             }
         });
 
-
         panelCentral.add(btnProductos);
+
         panelCentral.add(btnCategorias);
+
         panelCentral.add(btnProveedores);
+
         panelCentral.add(btnMovimientos);
+
         panelCentral.add(btnReportes);
+
+        panelCentral.add(btnUsuarios);
+
         panelCentral.add(btnCerrarSesion);
 
         add(
@@ -234,7 +257,6 @@ public class DashboardView extends JFrame {
 
         setVisible(true);
     }
-
 
     private JButton crearBoton(
 
