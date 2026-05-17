@@ -82,6 +82,59 @@ public class UsuarioController {
 
         try {
 
+            if(
+                    view.txtNombre.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    view.txtUsuario.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    new String(
+                            view.txtContrasena
+                                    .getPassword()
+                    ).trim().isEmpty()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Complete todos los campos"
+                );
+
+                return;
+            }
+
+            if(
+                    dao.existeUsuario(
+                            view.txtUsuario.getText()
+                    )
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "El usuario ya existe"
+                );
+
+                return;
+            }
+
+            String password =
+                    new String(
+                            view.txtContrasena
+                                    .getPassword()
+                    );
+
+            if(password.length() < 4){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "La contraseña debe tener minimo 4 caracteres"
+                );
+
+                return;
+            }
+
             Usuario usuario =
                     new Usuario();
 
@@ -94,11 +147,7 @@ public class UsuarioController {
             );
 
             usuario.setContrasena(
-
-                    new String(
-                            view.txtContrasena
-                                    .getPassword()
-                    )
+                    password
             );
 
             Rol rol =
@@ -155,6 +204,60 @@ public class UsuarioController {
 
         try {
 
+            if(
+                    view.txtNombre.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    view.txtUsuario.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    new String(
+                            view.txtContrasena
+                                    .getPassword()
+                    ).trim().isEmpty()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Complete todos los campos"
+                );
+
+                return;
+            }
+
+            if(
+                    dao.existeUsuarioEditar(
+                            view.txtUsuario.getText(),
+                            idUsuarioSeleccionado
+                    )
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "El usuario ya existe"
+                );
+
+                return;
+            }
+
+            String password =
+                    new String(
+                            view.txtContrasena
+                                    .getPassword()
+                    );
+
+            if(password.length() < 4){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "La contraseña debe tener minimo 4 caracteres"
+                );
+
+                return;
+            }
+
             Usuario usuario =
                     new Usuario();
 
@@ -171,11 +274,7 @@ public class UsuarioController {
             );
 
             usuario.setContrasena(
-
-                    new String(
-                            view.txtContrasena
-                                    .getPassword()
-                    )
+                    password
             );
 
             Rol rol =
@@ -254,6 +353,13 @@ public class UsuarioController {
                 limpiar();
 
                 listarUsuarios();
+
+            }else{
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Error al eliminar"
+                );
             }
         }
     }

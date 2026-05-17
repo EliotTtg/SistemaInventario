@@ -11,6 +11,88 @@ import java.util.List;
 
 public class UsuarioDAO {
 
+    public boolean existeUsuario(
+            String username
+    ) {
+
+        String sql = """
+                SELECT id_usuario
+                FROM usuarios
+                WHERE usuario = ?
+                """;
+
+        try (
+
+                Connection con =
+                        ConexionBD.conectar();
+
+                PreparedStatement ps =
+                        con.prepareStatement(sql)
+
+        ) {
+
+            ps.setString(1, username);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Error validar usuario: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
+
+    public boolean existeUsuarioEditar(
+
+            String username,
+
+            int idUsuario
+    ) {
+
+        String sql = """
+                SELECT id_usuario
+                FROM usuarios
+                WHERE usuario = ?
+                AND id_usuario != ?
+                """;
+
+        try (
+
+                Connection con =
+                        ConexionBD.conectar();
+
+                PreparedStatement ps =
+                        con.prepareStatement(sql)
+
+        ) {
+
+            ps.setString(1, username);
+
+            ps.setInt(2, idUsuario);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Error validar usuario editar: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
+
     public Usuario validarUsuario(
 
             String usuario,

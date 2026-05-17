@@ -1,15 +1,99 @@
 package dao;
 
 import config.ConexionBD;
+
 import model.Categoria;
 import model.Producto;
 import model.Proveedor;
 
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoDAO {
+
+    public boolean existeCodigo(
+            String codigo
+    ) {
+
+        String sql = """
+                SELECT id_producto
+                FROM productos
+                WHERE codigo = ?
+                """;
+
+        try (
+
+                Connection con =
+                        ConexionBD.conectar();
+
+                PreparedStatement ps =
+                        con.prepareStatement(sql)
+
+        ) {
+
+            ps.setString(1, codigo);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Error validar codigo: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
+
+    public boolean existeCodigoEditar(
+
+            String codigo,
+
+            int idProducto
+    ) {
+
+        String sql = """
+                SELECT id_producto
+                FROM productos
+                WHERE codigo = ?
+                AND id_producto != ?
+                """;
+
+        try (
+
+                Connection con =
+                        ConexionBD.conectar();
+
+                PreparedStatement ps =
+                        con.prepareStatement(sql)
+
+        ) {
+
+            ps.setString(1, codigo);
+
+            ps.setInt(2, idProducto);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Error validar codigo editar: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
 
     public boolean guardar(
             Producto producto
@@ -95,7 +179,6 @@ public class ProductoDAO {
 
         return false;
     }
-
 
     public boolean actualizar(
             Producto producto
@@ -186,7 +269,6 @@ public class ProductoDAO {
         return false;
     }
 
-
     public boolean eliminar(
             int id
     ) {
@@ -253,55 +335,38 @@ public class ProductoDAO {
                 producto = new Producto();
 
                 producto.setIdProducto(
-                        rs.getInt(
-                                "id_producto"
-                        )
+                        rs.getInt("id_producto")
                 );
 
                 producto.setCodigo(
-                        rs.getString(
-                                "codigo"
-                        )
+                        rs.getString("codigo")
                 );
 
                 producto.setNombre(
-                        rs.getString(
-                                "nombre"
-                        )
+                        rs.getString("nombre")
                 );
 
                 producto.setDescripcion(
-                        rs.getString(
-                                "descripcion"
-                        )
+                        rs.getString("descripcion")
                 );
 
                 producto.setStockActual(
-                        rs.getInt(
-                                "stock_actual"
-                        )
+                        rs.getInt("stock_actual")
                 );
 
                 producto.setStockMinimo(
-                        rs.getInt(
-                                "stock_minimo"
-                        )
+                        rs.getInt("stock_minimo")
                 );
 
                 producto.setPrecio(
-                        rs.getDouble(
-                                "precio"
-                        )
+                        rs.getDouble("precio")
                 );
-
 
                 Categoria categoria =
                         new Categoria();
 
                 categoria.setIdCategoria(
-                        rs.getInt(
-                                "id_categoria"
-                        )
+                        rs.getInt("id_categoria")
                 );
 
                 producto.setCategoria(
@@ -312,9 +377,7 @@ public class ProductoDAO {
                         new Proveedor();
 
                 proveedor.setIdProveedor(
-                        rs.getInt(
-                                "id_proveedor"
-                        )
+                        rs.getInt("id_proveedor")
                 );
 
                 producto.setProveedor(
@@ -333,14 +396,16 @@ public class ProductoDAO {
         return producto;
     }
 
-
     public List<Producto> listar() {
 
         List<Producto> lista =
                 new ArrayList<>();
 
-        String sql =
-                "SELECT * FROM productos";
+        String sql = """
+                SELECT *
+                FROM productos
+                ORDER BY id_producto DESC
+                """;
 
         try (
 
@@ -361,54 +426,38 @@ public class ProductoDAO {
                         new Producto();
 
                 producto.setIdProducto(
-                        rs.getInt(
-                                "id_producto"
-                        )
+                        rs.getInt("id_producto")
                 );
 
                 producto.setCodigo(
-                        rs.getString(
-                                "codigo"
-                        )
+                        rs.getString("codigo")
                 );
 
                 producto.setNombre(
-                        rs.getString(
-                                "nombre"
-                        )
+                        rs.getString("nombre")
                 );
 
                 producto.setDescripcion(
-                        rs.getString(
-                                "descripcion"
-                        )
+                        rs.getString("descripcion")
                 );
 
                 producto.setStockActual(
-                        rs.getInt(
-                                "stock_actual"
-                        )
+                        rs.getInt("stock_actual")
                 );
 
                 producto.setStockMinimo(
-                        rs.getInt(
-                                "stock_minimo"
-                        )
+                        rs.getInt("stock_minimo")
                 );
 
                 producto.setPrecio(
-                        rs.getDouble(
-                                "precio"
-                        )
+                        rs.getDouble("precio")
                 );
 
                 Categoria categoria =
                         new Categoria();
 
                 categoria.setIdCategoria(
-                        rs.getInt(
-                                "id_categoria"
-                        )
+                        rs.getInt("id_categoria")
                 );
 
                 producto.setCategoria(
@@ -419,9 +468,7 @@ public class ProductoDAO {
                         new Proveedor();
 
                 proveedor.setIdProveedor(
-                        rs.getInt(
-                                "id_proveedor"
-                        )
+                        rs.getInt("id_proveedor")
                 );
 
                 producto.setProveedor(

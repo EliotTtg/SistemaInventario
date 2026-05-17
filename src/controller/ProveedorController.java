@@ -74,6 +74,74 @@ public class ProveedorController {
 
         try {
 
+            if(
+                    view.txtNombre.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    view.txtRuc.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    view.txtTelefono.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    view.txtDireccion.getText()
+                            .trim()
+                            .isEmpty()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Complete todos los campos"
+                );
+
+                return;
+            }
+
+            String ruc =
+                    view.txtRuc.getText();
+
+            if(
+                    !ruc.matches("\\d{11}")
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "El RUC debe tener 11 digitos"
+                );
+
+                return;
+            }
+
+            String telefono =
+                    view.txtTelefono.getText();
+
+            if(
+                    !telefono.matches("\\d+")
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Telefono invalido"
+                );
+
+                return;
+            }
+
+            if(
+                    dao.existeRuc(ruc)
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "El RUC ya existe"
+                );
+
+                return;
+            }
+
             Proveedor proveedor =
                     new Proveedor();
 
@@ -81,12 +149,10 @@ public class ProveedorController {
                     view.txtNombre.getText()
             );
 
-            proveedor.setRuc(
-                    view.txtRuc.getText()
-            );
+            proveedor.setRuc(ruc);
 
             proveedor.setTelefono(
-                    view.txtTelefono.getText()
+                    telefono
             );
 
             proveedor.setDireccion(
@@ -138,6 +204,77 @@ public class ProveedorController {
 
         try {
 
+            if(
+                    view.txtNombre.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    view.txtRuc.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    view.txtTelefono.getText()
+                            .trim()
+                            .isEmpty()
+                    ||
+                    view.txtDireccion.getText()
+                            .trim()
+                            .isEmpty()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Complete todos los campos"
+                );
+
+                return;
+            }
+
+            String ruc =
+                    view.txtRuc.getText();
+
+            if(
+                    !ruc.matches("\\d{11}")
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "El RUC debe tener 11 digitos"
+                );
+
+                return;
+            }
+
+            String telefono =
+                    view.txtTelefono.getText();
+
+            if(
+                    !telefono.matches("\\d+")
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Telefono invalido"
+                );
+
+                return;
+            }
+
+            if(
+                    dao.existeRucEditar(
+                            ruc,
+                            idProveedorSeleccionado
+                    )
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "El RUC ya existe"
+                );
+
+                return;
+            }
+
             Proveedor proveedor =
                     new Proveedor();
 
@@ -149,12 +286,10 @@ public class ProveedorController {
                     view.txtNombre.getText()
             );
 
-            proveedor.setRuc(
-                    view.txtRuc.getText()
-            );
+            proveedor.setRuc(ruc);
 
             proveedor.setTelefono(
-                    view.txtTelefono.getText()
+                    telefono
             );
 
             proveedor.setDireccion(
@@ -228,6 +363,13 @@ public class ProveedorController {
                 limpiar();
 
                 listarProveedores();
+
+            }else{
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Error al eliminar"
+                );
             }
         }
     }

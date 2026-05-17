@@ -1,13 +1,97 @@
 package dao;
 
 import config.ConexionBD;
+
 import model.Categoria;
 
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriaDAO {
+
+    public boolean existeCategoria(
+            String nombre
+    ) {
+
+        String sql = """
+                SELECT id_categoria
+                FROM categorias
+                WHERE nombre = ?
+                """;
+
+        try (
+
+                Connection con =
+                        ConexionBD.conectar();
+
+                PreparedStatement ps =
+                        con.prepareStatement(sql)
+
+        ) {
+
+            ps.setString(1, nombre);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Error validar categoria: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
+
+    public boolean existeCategoriaEditar(
+
+            String nombre,
+
+            int idCategoria
+    ) {
+
+        String sql = """
+                SELECT id_categoria
+                FROM categorias
+                WHERE nombre = ?
+                AND id_categoria != ?
+                """;
+
+        try (
+
+                Connection con =
+                        ConexionBD.conectar();
+
+                PreparedStatement ps =
+                        con.prepareStatement(sql)
+
+        ) {
+
+            ps.setString(1, nombre);
+
+            ps.setInt(2, idCategoria);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Error validar categoria editar: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
 
     public boolean guardar(
             Categoria categoria
@@ -46,14 +130,13 @@ public class CategoriaDAO {
         } catch (SQLException e) {
 
             System.out.println(
-                    "Error guardar: "
+                    "Error guardar categoria: "
                             + e.getMessage()
             );
         }
 
         return false;
     }
-
 
     public boolean actualizar(
             Categoria categoria
@@ -96,14 +179,13 @@ public class CategoriaDAO {
         } catch (SQLException e) {
 
             System.out.println(
-                    "Error actualizar: "
+                    "Error actualizar categoria: "
                             + e.getMessage()
             );
         }
 
         return false;
     }
-
 
     public boolean eliminar(
             int id
@@ -131,14 +213,13 @@ public class CategoriaDAO {
         } catch (SQLException e) {
 
             System.out.println(
-                    "Error eliminar: "
+                    "Error eliminar categoria: "
                             + e.getMessage()
             );
         }
 
         return false;
     }
-
 
     public Categoria buscarPorId(
             int id
@@ -194,7 +275,7 @@ public class CategoriaDAO {
         } catch (SQLException e) {
 
             System.out.println(
-                    "Error buscar: "
+                    "Error buscar categoria: "
                             + e.getMessage()
             );
         }
@@ -202,15 +283,16 @@ public class CategoriaDAO {
         return categoria;
     }
 
-
-
     public List<Categoria> listar() {
 
         List<Categoria> lista =
                 new ArrayList<>();
 
-        String sql =
-                "SELECT * FROM categorias";
+        String sql = """
+                SELECT *
+                FROM categorias
+                ORDER BY nombre
+                """;
 
         try (
 
@@ -254,7 +336,7 @@ public class CategoriaDAO {
         } catch (SQLException e) {
 
             System.out.println(
-                    "Error listar: "
+                    "Error listar categorias: "
                             + e.getMessage()
             );
         }

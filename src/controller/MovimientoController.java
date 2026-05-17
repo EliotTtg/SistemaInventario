@@ -93,14 +93,77 @@ public class MovimientoController {
 
         try {
 
+            if(
+                    view.txtCantidad
+                            .getText()
+                            .trim()
+                            .isEmpty()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Ingrese cantidad"
+                );
+
+                return;
+            }
+
+            int cantidad =
+                    Integer.parseInt(
+                            view.txtCantidad
+                                    .getText()
+                    );
+
+            if(cantidad <= 0){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Cantidad invalida"
+                );
+
+                return;
+            }
+
+            Producto producto =
+                    (Producto)
+                            view.cbProducto
+                                    .getSelectedItem();
+
+            if(producto == null){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Seleccione producto"
+                );
+
+                return;
+            }
+
+            String tipoTexto =
+                    view.cbTipoMovimiento
+                            .getSelectedItem()
+                            .toString();
+
+            if(
+                    tipoTexto.equals("SALIDA")
+                    &&
+                    cantidad >
+                    producto.getStockActual()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Stock insuficiente"
+                );
+
+                return;
+            }
+
             MovimientoInventario movimiento =
                     new MovimientoInventario();
 
             movimiento.setCantidad(
-
-                    Integer.parseInt(
-                            view.txtCantidad.getText()
-                    )
+                    cantidad
             );
 
             movimiento.setMotivo(
@@ -110,10 +173,7 @@ public class MovimientoController {
             TipoMovimiento tipo =
                     new TipoMovimiento();
 
-            if(view.cbTipoMovimiento
-                    .getSelectedItem()
-                    .toString()
-                    .equals("ENTRADA")){
+            if(tipoTexto.equals("ENTRADA")){
 
                 tipo.setIdTipoMovimiento(1);
 
@@ -123,11 +183,6 @@ public class MovimientoController {
             }
 
             movimiento.setTipoMovimiento(tipo);
-
-            Producto producto =
-                    (Producto)
-                            view.cbProducto
-                                    .getSelectedItem();
 
             movimiento.setProducto(producto);
 
@@ -140,10 +195,31 @@ public class MovimientoController {
 
             if(resultado){
 
+                Producto productoActualizado =
+                        productoDAO.buscarPorId(
+                                producto.getIdProducto()
+                        );
+
+                if(
+                        productoActualizado
+                                .getStockActual()
+                        <=
+                        productoActualizado
+                                .getStockMinimo()
+                ){
+
+                    JOptionPane.showMessageDialog(
+                            view,
+                            "Alerta: stock minimo alcanzado"
+                    );
+                }
+
                 JOptionPane.showMessageDialog(
                         view,
                         "Movimiento registrado"
                 );
+
+                cargarProductos();
 
                 limpiar();
 
@@ -156,6 +232,13 @@ public class MovimientoController {
                         "Error al registrar"
                 );
             }
+
+        } catch (NumberFormatException ex) {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Cantidad invalida"
+            );
 
         } catch (Exception ex) {
 

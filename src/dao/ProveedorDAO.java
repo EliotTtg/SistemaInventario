@@ -1,13 +1,97 @@
 package dao;
 
 import config.ConexionBD;
+
 import model.Proveedor;
 
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProveedorDAO {
+
+    public boolean existeRuc(
+            String ruc
+    ) {
+
+        String sql = """
+                SELECT id_proveedor
+                FROM proveedores
+                WHERE ruc = ?
+                """;
+
+        try (
+
+                Connection con =
+                        ConexionBD.conectar();
+
+                PreparedStatement ps =
+                        con.prepareStatement(sql)
+
+        ) {
+
+            ps.setString(1, ruc);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Error validar RUC: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
+
+    public boolean existeRucEditar(
+
+            String ruc,
+
+            int idProveedor
+    ) {
+
+        String sql = """
+                SELECT id_proveedor
+                FROM proveedores
+                WHERE ruc = ?
+                AND id_proveedor != ?
+                """;
+
+        try (
+
+                Connection con =
+                        ConexionBD.conectar();
+
+                PreparedStatement ps =
+                        con.prepareStatement(sql)
+
+        ) {
+
+            ps.setString(1, ruc);
+
+            ps.setInt(2, idProveedor);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Error validar RUC editar: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
 
     public boolean guardar(
             Proveedor proveedor
@@ -65,7 +149,6 @@ public class ProveedorDAO {
 
         return false;
     }
-
 
     public boolean actualizar(
             Proveedor proveedor
@@ -128,7 +211,6 @@ public class ProveedorDAO {
         return false;
     }
 
-
     public boolean eliminar(
             int id
     ) {
@@ -162,7 +244,6 @@ public class ProveedorDAO {
 
         return false;
     }
-
 
     public Proveedor buscarPorId(
             int id

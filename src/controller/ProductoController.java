@@ -23,10 +23,15 @@ import java.util.List;
 public class ProductoController {
 
     private ProductoView view;
+
     private ProductoDAO dao;
+
     private CategoriaDAO categoriaDAO;
+
     private ProveedorDAO proveedorDAO;
+
     private ReporteDAO reporteDAO;
+
     private int idProductoSeleccionado = -1;
 
     public ProductoController(
@@ -113,6 +118,85 @@ public class ProductoController {
 
         try {
 
+            if(
+                    view.txtCodigo.getText().trim().isEmpty()
+                    ||
+                    view.txtNombre.getText().trim().isEmpty()
+                    ||
+                    view.txtPrecio.getText().trim().isEmpty()
+                    ||
+                    view.txtStock.getText().trim().isEmpty()
+                    ||
+                    view.txtStockMinimo.getText().trim().isEmpty()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Complete todos los campos"
+                );
+
+                return;
+            }
+
+            if(
+                    dao.existeCodigo(
+                            view.txtCodigo.getText()
+                    )
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "El codigo ya existe"
+                );
+
+                return;
+            }
+
+            int stock =
+                    Integer.parseInt(
+                            view.txtStock.getText()
+                    );
+
+            int stockMinimo =
+                    Integer.parseInt(
+                            view.txtStockMinimo.getText()
+                    );
+
+            double precio =
+                    Double.parseDouble(
+                            view.txtPrecio.getText()
+                    );
+
+            if(stock < 0){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Stock invalido"
+                );
+
+                return;
+            }
+
+            if(stockMinimo < 0){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Stock minimo invalido"
+                );
+
+                return;
+            }
+
+            if(precio <= 0){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Precio invalido"
+                );
+
+                return;
+            }
+
             Producto producto =
                     new Producto();
 
@@ -128,23 +212,11 @@ public class ProductoController {
                     view.txtDescripcion.getText()
             );
 
-            producto.setStockActual(
-                    Integer.parseInt(
-                            view.txtStock.getText()
-                    )
-            );
+            producto.setStockActual(stock);
 
-            producto.setStockMinimo(
-                    Integer.parseInt(
-                            view.txtStockMinimo.getText()
-                    )
-            );
+            producto.setStockMinimo(stockMinimo);
 
-            producto.setPrecio(
-                    Double.parseDouble(
-                            view.txtPrecio.getText()
-                    )
-            );
+            producto.setPrecio(precio);
 
             producto.setCategoria(
                     (Categoria)
@@ -180,6 +252,13 @@ public class ProductoController {
                 );
             }
 
+        } catch (NumberFormatException ex) {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Stock y precio deben ser numericos"
+            );
+
         } catch (Exception ex) {
 
             JOptionPane.showMessageDialog(
@@ -203,6 +282,86 @@ public class ProductoController {
 
         try {
 
+            if(
+                    view.txtCodigo.getText().trim().isEmpty()
+                    ||
+                    view.txtNombre.getText().trim().isEmpty()
+                    ||
+                    view.txtPrecio.getText().trim().isEmpty()
+                    ||
+                    view.txtStock.getText().trim().isEmpty()
+                    ||
+                    view.txtStockMinimo.getText().trim().isEmpty()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Complete todos los campos"
+                );
+
+                return;
+            }
+
+            if(
+                    dao.existeCodigoEditar(
+                            view.txtCodigo.getText(),
+                            idProductoSeleccionado
+                    )
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "El codigo ya existe"
+                );
+
+                return;
+            }
+
+            int stock =
+                    Integer.parseInt(
+                            view.txtStock.getText()
+                    );
+
+            int stockMinimo =
+                    Integer.parseInt(
+                            view.txtStockMinimo.getText()
+                    );
+
+            double precio =
+                    Double.parseDouble(
+                            view.txtPrecio.getText()
+                    );
+
+            if(stock < 0){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Stock invalido"
+                );
+
+                return;
+            }
+
+            if(stockMinimo < 0){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Stock minimo invalido"
+                );
+
+                return;
+            }
+
+            if(precio <= 0){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Precio invalido"
+                );
+
+                return;
+            }
+
             Producto producto =
                     new Producto();
 
@@ -222,23 +381,11 @@ public class ProductoController {
                     view.txtDescripcion.getText()
             );
 
-            producto.setStockActual(
-                    Integer.parseInt(
-                            view.txtStock.getText()
-                    )
-            );
+            producto.setStockActual(stock);
 
-            producto.setStockMinimo(
-                    Integer.parseInt(
-                            view.txtStockMinimo.getText()
-                    )
-            );
+            producto.setStockMinimo(stockMinimo);
 
-            producto.setPrecio(
-                    Double.parseDouble(
-                            view.txtPrecio.getText()
-                    )
-            );
+            producto.setPrecio(precio);
 
             producto.setCategoria(
                     (Categoria)
@@ -273,6 +420,13 @@ public class ProductoController {
                         "Error al actualizar"
                 );
             }
+
+        } catch (NumberFormatException ex) {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Stock y precio deben ser numericos"
+            );
 
         } catch (Exception ex) {
 
@@ -340,17 +494,17 @@ public class ProductoController {
 
         if(resultado){
 
-                JOptionPane.showMessageDialog(
-                        view,
-                        "Reporte generado correctamente"
-                );
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Reporte generado correctamente"
+            );
 
         }else{
 
-                JOptionPane.showMessageDialog(
-                        view,
-                        "Error al generar reporte"
-                );
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Error al generar reporte"
+            );
         }
     }
 

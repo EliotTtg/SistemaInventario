@@ -74,6 +74,34 @@ public class CategoriaController {
 
         try {
 
+            if(
+                    view.txtNombre.getText()
+                            .trim()
+                            .isEmpty()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Ingrese nombre"
+                );
+
+                return;
+            }
+
+            if(
+                    dao.existeCategoria(
+                            view.txtNombre.getText()
+                    )
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "La categoria ya existe"
+                );
+
+                return;
+            }
+
             Categoria categoria =
                     new Categoria();
 
@@ -129,6 +157,35 @@ public class CategoriaController {
         }
 
         try {
+
+            if(
+                    view.txtNombre.getText()
+                            .trim()
+                            .isEmpty()
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Ingrese nombre"
+                );
+
+                return;
+            }
+
+            if(
+                    dao.existeCategoriaEditar(
+                            view.txtNombre.getText(),
+                            idCategoriaSeleccionada
+                    )
+            ){
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "La categoria ya existe"
+                );
+
+                return;
+            }
 
             Categoria categoria =
                     new Categoria();
@@ -212,6 +269,13 @@ public class CategoriaController {
                 limpiar();
 
                 listarCategorias();
+
+            }else{
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "No se puede eliminar la categoria porque tiene productos asociados"
+                );
             }
         }
     }
